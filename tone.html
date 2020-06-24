@@ -1,0 +1,31 @@
+<script src="js/Tone.js"></script>
+<script>
+  barryL = new Tone.Player({
+        url: "midi/barrysIdea_01_guitarAndBassLeftChannel.mp3",
+        loop: false,
+        pan: 1,
+    }).toMaster();
+
+    barryR = new Tone.Player({
+        url: "midi/barrysIdea_01_guitarAndBassRightChannel.mp3",
+        loop: false
+    }).toMaster();
+
+  
+    setTimeout(function(){ 
+        console.log('--1');
+ barryL.start()
+ // barryR.start()
+  }, 1000);
+  
+  setTimeout(function(){ 
+    console.log('--2');
+ barryL.volume.value = -12;
+  }, 2000);
+
+  setTimeout(function(){ 
+    console.log('--3');
+ barryL.volume.value = 0;
+  }, 3000);
+    
+</script>

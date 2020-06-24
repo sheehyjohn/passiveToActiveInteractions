@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  
+    <script src="https://threejs.org/build/three.min.js"></script><!--r83-->
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+  
+    <head> </head>
+  <style>
+body{
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+  </style>
+      <div id='scene1_3dCanvas'  >This is Scene 1</div> 
+      <!--
+  <div class="webgl"></div>
+     -->
+</body> 
+<script> 
+var container3;
+    var camera3 = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight,
+		1, 1000);
+        camera3.position.set(0, 75, 50);
+
+var scene3 = new THREE.Scene();
+
+
+function renderScene() {
+
+    var sphereGeometry = new THREE.SphereGeometry(0.9, 30, 20); /* Венера*/
+var sphereMaterial = new THREE.MeshLambertMaterial({
+	color: 0x7700ff
+});
+var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+sphere.position.x = 0; /*Солнце */
+sphere.position.y = 0;
+sphere.position.z = 0;
+sphere.rotation.z = -23.5 * Math.PI / 180;
+sphere.castShadow = true;
+sphere.castShadow = true;
+scene3.add(sphere);
+
+
+var spheresGeometry = new THREE.SphereGeometry(12, 30, 20);
+var spheresMaterial = new THREE.MeshLambertMaterial({
+	color: 0x7770ff
+});
+var spheres = new THREE.Mesh(spheresGeometry, spheresMaterial);
+
+sphere.position.x = 47;
+sphere.position.y = 0;
+sphere.position.z = 0;
+sphere.rotation.z = -23.5 * Math.PI / 180;
+sphere.castShadow = true;
+sphere.castShadow = true;
+scene3.add(spheres);
+
+var sphere2Geometry = new THREE.SphereGeometry(0.5, 30, 20);
+var sphere2Material = new THREE.MeshLambertMaterial({
+	color: 0xff0f00
+}); /* Солнце*/
+var sphere = new THREE.Mesh(sphere2Geometry, sphere2Material);
+sphere.position.x = 27; /*Меркурий */
+sphere.position.y = 0;
+sphere.position.z = 0;
+sphere.rotation.z = -23.5 * Math.PI / 180;
+sphere.castShadow = true;
+scene3.add(sphere);
+
+var sphere3Geometry = new THREE.SphereGeometry(1, 30, 20); /*Земля*/
+var sphere3Material = new THREE.MeshLambertMaterial({
+	color: 0xff000c0
+});
+ 
+ 
+
+var cubeGeometry = new THREE.CubeGeometry( 900, 900, 900 );
+var cubeMaterial = new THREE.MeshBasicMaterial( {
+	color: 0xa0adaf,
+	side: THREE.BackSide} );
+var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+cube.position.y = 0;
+
+scene3.add( cube );
+
+
+
+var light = new THREE.PointLight();
+light.position.set(0, 150, 0);
+scene3.add(light);
+
+}
+
+
+var renderer3 = renderer3 = new THREE.WebGLRenderer({
+	antialias: true
+});
+renderer3.setSize(window.innerWidth, window.innerHeight);
+container3 = document.getElementById( 'scene1_3dCanvas' );
+  
+//document.body.appendChild(renderer3.domElement);
+
+var controls3 = new THREE.OrbitControls(camera3, renderer3.domElement);
+//controls.minPolarAngle = Math.PI / 2; //раскомментировать для ограничения
+controls3.maxPolarAngle = Math.PI / 2;
+container3.appendChild( renderer3.domElement );
+ 
+function animate3() {
+	requestAnimationFrame(animate3);
+	controls3.update();
+	renderer3.render(scene3, camera3);
+}
+renderScene();
+animate3();
+
+    
+    
+    </script>
+ 
+
+
+</html>
+ 
+  

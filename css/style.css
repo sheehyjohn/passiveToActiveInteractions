@@ -1,0 +1,68 @@
+a {color:dimgrey ; text-decoration: none}
+a:hover {color: blue;}
+ 
+body {
+ 
+overflow: hidden; /* Hide scrollbars */
+}
+
+h1 { font-family: Inconsolata; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } 
+h3 { font-family: Inconsolata; font-size: 24px; font-weight: bold; font-style: bold; font-variant: normal; font-weight: 700; line-height: 26.4px; } 
+h4 { font-family: Inconsolata; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } 
+p { font-family: Inconsolata; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; }
+ blockquote { font-family: Inconsolata; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: Inconsolata; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5667px; }
+
+.faceDetecting {
+    margin-top: 25%;
+    margin-bottom: 25%; 
+    text-align: center
+}
+
+.buttonMenu {
+    margin-top: 7.5px;
+    margin-top: 7.5px;
+}
+
+.buttonMenuH4 {
+    margin-top: 3px;
+    margin-top: 3px;
+}
+/*
+  overflow: auto; overflow-y: auto;
+  /*/
+  /*
+  background-color: white;
+  background-image: url('bg.png');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: contain;
+  margin: 0px;
+*/
+  /* css from "headtrackr/targets.html*/
+  /*
+	font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+        overflow: hidden;
+      }
+      */
+/*
+#jeeFaceFilterCanvas {
+  z-index: 10;
+  position: absolute; 
+  max-height: 100%;
+  max-width: 100%;
+  left: 50%;
+  top: 50%;
+  width: 100vmin;
+  transform: translate(-50%, -50%) rotateY(180deg);
+} 
+
+@media (max-width: 787px) {
+  #jeeFaceFilterCanvas {
+    right: 0px;
+    top: 60px;
+    transform: rotateY(180deg);
+  }
+}
+*/

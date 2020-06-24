@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-language" content="en-EN" />
+    
+    <title>headCoupledMusic</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <script src="js/babylon.custom.js"></script>
+    <script src="js/audiosynth.js"></script>
+    <script src="js/Three.js"></script>
+    <script src="js/Stats.js"></script> 
+    <script src="js/controllers.js"></script> 
+    <script src="js/jeelizFaceFilter.js"></script>
+    <script src="js/noteHelpers.js"></script>
+
+    <!-- Music Files -->
+    <script src="midi/barrysIdea_01_guitarAndBass.js"></script>
+    
+
+   
+    
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/bootStrap.css" type="text/css" />
+
+    <!-- BABYLONJS CUSTOM SHADER MATERIAL GLSL CODES : -->
+    <script type="application/vertexShader" id="videoMatVertexShaderCode">
+      attribute vec3 position;
+      varying vec2 vUV;
+
+      void main(void){
+        gl_Position=vec4(position, 1.);
+        vUV=0.5+0.5*position.xy;
+      }
+    </script>
+
+    <script type="application/fragmentShader" id="videoMatFragmentShaderCode">
+      precision lowp float;
+      uniform sampler2D samplerVideo;
+      varying vec2 vUV;
+
+      void main(void){
+        gl_FragColor=texture2D(samplerVideo, vUV);
+      }
+    </script>
+
+  </head>
+  
+  <body onload="main()">
+    <div class="container-fluid">
+      <h1>Grid-01</h1>
+      
+      <div class="row">
+        <div class="col-sm-3 col-md-6 col-lg-3">
+         Lorem
+          
+          <canvas width="300" height="300" id='jeeFaceFilterCanvas'></canvas>
+         Lorem
+         
+          <h3>Numbers</h3>
+           
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">camCtrl</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">timer</th> 
+                <td id="timerTime"></td> 
+                <td id="timerSeconds"></td> 
+                <td id="timerTime10th"></td> 
+              </tr>
+              <tr>
+                <th scope="row">x</th>
+                <td>x1</td>
+                <td id="x1Table"></td>
+                <td id="camController_x"></td>
+              </tr>
+              <tr>
+                <th scope="row">y</th>
+                <td>y1</td>
+                <td id="y1Table"></td>
+                <td id="camController_y"></td>
+              </tr>
+               <tr>
+                <th scope="row">z</th>
+                <td>z</td> 
+                <td id="demo_cube_z"></td>
+                <td id=""></td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+        <div class="col-sm-9 col-md-6 col-lg-9">
+          Lorem 
+          <div id='scene3dCanvas'></div>
+          Lorem
+          
+        </div>
+      </div>
+    </div>  
+   
+  </body> 
+<script>
+  //console.log(barrysIdea_01_guitarAndBass);
+  // barrysIdea_01_guitarAndBass_consoleLogs() ;
+  //console.log(barrysIdea_01_guitarAndBassJustNotes);
+
+  
+  //Create the audio tag
+var soundFile = document.createElement("audio");
+soundFile.preload = "auto";
+var fileName = "midi/barrysIdea_01_guitarAndBass";
+
+//Load the sound file (using a source element for expandability)
+var src = document.createElement("source");
+src.src = fileName + ".mp3";
+soundFile.appendChild(src);
+
+//Load the audio tag
+//It auto plays as a fallback
+soundFile.load();
+soundFile.volume = 1.000000;
+//soundFile.play(); 
+
+    var piano = Synth.createInstrument('piano'); 
+    //https://tonejs.github.io/docs/13.8.25/Synth
+    //Global Objects for Flags, Parameters and Mappings
+    var clock = {
+          timer : 0,
+          seconds : 0,
+          seconds10th : 0
+    } 
+     
+    var appFlags = {
+        faceDetectedFlag : false,
+        placeNotesCounter : 0
+    }
+
+    var parameters = {
+        x1 : 50,
+        y1 : 50,
+        
+        y1Offset : 25,
+        camController_x : 0,
+        camController_y : 0,
+        //camCont_x : 0,
+        cameraPositionZ : 250,
+        demo_cube_z : 0
+    }
+
+    //Ratios and Translations for Mapping - ie Webcam to SceneCam
+    var mappings = {
+        webCam2Scene3DCam_x : 60,
+        webCam2Scene3DCam_y : 90        
+    }
+    
+    //Two Interval Timers to get track of timings
+    //Melody reproduction requires exact timing...are frame rates effect timer?  
+    setInterval(timer_1s, 1000);
+    setInterval(timer_10ms, 10); 
+
+    function timer_1s() {
+        if (appFlags.faceDetectedFlag == true) {
+            var d = new Date();
+            clock.seconds++;
+            document.getElementById("timerTime").innerHTML = d.toLocaleTimeString();
+            document.getElementById("timerSeconds").innerHTML = clock.seconds; 
+           // console.log(soundFile.isPlaying);
+           // console.log(soundFile);
+        }
+    }
+
+    function timer_10ms() { 
+        //Should Face Activation be used for increment the timers? 
+        if (appFlags.faceDetectedFlag == true) {
+            clock.seconds10th++;
+            document.getElementById("timerTime10th").innerHTML = clock.seconds10th;
+        
+          if ((clock.seconds >= 2 ) && (clock.seconds <= 12)){ 
+           
+              for ( var p=0 ; p < notes01.length ; p++ ){
+                 placeNotesInArrayInScene(notes01[p]);
+                 if (p < notes02.length){
+                  placeNotesInArrayInScene(notes02[p]);
+                 }
+              } 
+          }
+            else {
+              soundFile.pause();
+            }
+            
+        } 
+    }  
+
+      updateTable();
+
+    function updateTable () { 
+        //update the table 
+        document.getElementById('x1Table').innerHTML = parameters.x1;
+        document.getElementById('y1Table').innerHTML = parameters.y1;  
+
+        if (appFlags.faceDetectedFlag == true) {
+            document.getElementById('camController_x').innerHTML = parameters.camController_x; 
+            document.getElementById('camController_y').innerHTML = parameters.camController_y; 
+            document.getElementById('demo_cube_z').innerHTML = parameters.demo_cube_z; 
+        }
+    }
+
+</script>
+
+<script src="js/scene3d.js"></script>
+<script src="js/demo_cube.js"></script>
+
+</html>
+ 
+  

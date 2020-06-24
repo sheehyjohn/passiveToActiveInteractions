@@ -1,19 +1,29 @@
-# passiveToActiveInteractions
-potential ISSTA - Submission 2020
+# README #
 
-**[Live Demo](https://passivetoactiveinteractions.netlify.app/)**
+This README would normally document whatever steps are necessary to get your application up and running.
 
-There are occasional sync issues with the online version and if this occurs, it is recommeneded to run a version locally.
+### What is this repository for? ###
 
-Start the project by downloading/cloning this repository.
-Node/NPM need to be installed.
-Open downloaded directory in terminal
+* Quick summary
+* Version
+* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-```
-npm install -g http-server
-http-server
-```
+### How do I get set up? ###
 
-go to localhost:3000 in browser
+* Summary of set up
+* Configuration
+* Dependencies
+* Database configuration
+* How to run tests
+* Deployment instructions
 
-Chrome is recommended for optimum 3D Performance 
+### Contribution guidelines ###
+
+* Writing tests
+* Code review
+* Other guidelines
+
+### Who do I talk to? ###
+
+* Repo owner or admin
+* Other community or team contact

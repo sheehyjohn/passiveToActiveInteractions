@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-language" content="en-EN" />
+    
+    <title>passive to active</title>
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Inconsolata" />
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles02.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootStrap.css"/>
+
+    <script src="https://threejs.org/build/three.min.js"></script><!--r83-->
+    <!-- <script src="js/Three.js"></script>  -->
+    <script src="js/orbitControls.js"></script> 
+    <script src="js/babylon.custom.js"></script>  
+    <script src="js/Tone.js"></script>
+    <script src="js/Stats.js"></script> 
+    <script src="js/controllers.js"></script> 
+    <script src="js/jeelizFaceFilter.js"></script>
+
+    <script src="js/noteHelpers.js"></script>
+    <script src="js/loadHelpers.js"></script>
+    <script src="js/stageOne.js"></script>
+    
+    <script src="js/stageThree.js"></script>
+    <script src="js/thirdScene.js"></script>
+     
+
+    <!-- Music Encoded as JSON Object -->
+    <script src="midi/barrysIdea_01_guitarAndBass.js"></script>
+    <script src="midi/ave_maria_2/ave_maria_2_short.js"></script>
+    <script src="midi/ledZep_blackDog/ledZep_blackDog_60secs_notes.js"></script>
+    <script src="midi/hendrix_fire/hendrix_fire_75secs_notes.js"></script> 
+    <script src="midi/amos_spirit/amos_teen_notes.js"></script> 
+    <script src="midi/marvin_grapevine/marvin_grapevine.js"></script>
+    <script src="midi/chapman_fast/chapman_fast.js"></script>
+
+    
+
+    <!-- BABYLONJS CUSTOM SHADER MATERIAL GLSL CODES : -->
+    <script type="application/vertexShader" id="videoMatVertexShaderCode">
+      attribute vec3 position;
+      varying vec2 vUV;
+
+      void main(void){
+        gl_Position=vec4(position, 1.);
+        vUV=0.5+0.5*position.xy;
+      }
+    </script>
+
+    <script type="application/fragmentShader" id="videoMatFragmentShaderCode">
+      precision lowp float;
+      uniform sampler2D samplerVideo;
+      varying vec2 vUV;
+
+      void main(void){
+        gl_FragColor=texture2D(samplerVideo, vUV);
+      }
+    </script> 
+    
+
+  </head>
+  
+  <body class="black" onload="main()"> 
+
+        <div class="box layer3" style="opacity: 0.85;">
+            <canvas id='jeeFaceFilterCanvas'  ></canvas>
+              <!--   
+            <div id="wrapper">
+                <div id="col1" style="margin-left: 1px;">
+                   
+                   <p> <button id="menu" style="margin-top: 1px; margin-bottom: 1px" type="button" class="buttonSmall">menu</button> </p>
+                    <br><br>
+                     -->
+
+                   
+                    
+                   
+                    
+                    <!-- Debug Buttons 
+                    <p> <button id="cameraToggle" type="button" class="buttonSmall">cameraToggle</button> </p>
+                    <p> <button id="sceneToggle" type="button" class="buttonSmall">sceneToggle</button> </p>
+                    <p> <button id="cameraStartPosition" type="button" class="buttonSmall">cameraStartPosition</button></p>
+                    <p> <button id="cameraMove" type="button" class="buttonSmall">cameraMove</button> </p>
+                    <p> <button id="shortTest" type="button" class="buttonSmall">Short Test</button> </p>
+                    <p> <button id="scene3Show" type="button" class="buttonSmall">scene3Show</button></p>
+                    -->
+
+                    <!--
+                </div>
+                <div id="col2">
+                    <div id="camController_x"> (x)</div>
+                </div>
+                <div id="col3">
+                    <div id="camController_y"> (y)</div> 
+                </div>
+            </div> 
+            -->
+        </div> 
+    
+         <!--
+        <div id="boxTopRight2"  >  
+            <p><button id="screenShot" type="button" class="buttonSmall">C3pos/screenShot</button> </p>
+        </div>
+         
+
+        <div id="boxBottomLeft2" class="noteBox">  
+            <div id="noteLeft"> </div>   
+        </div> 
+
+        <div id="boxBottomRight2" class="noteBox">  
+            <div id="noteRight">  </div>   
+        </div> 
+       -->
+   
+        <div id="userInterfaceChoice" class="ui_01"> 
+            <div id="wrapperMenu"> 
+                
+                <div>
+                    <h1 id="faceNotDetected" class= "faceDetecting"> Face Detect .... Searching </h1>
+                    <br>
+                    <!--
+                    <p>if no FaceDetected</p>
+                    <p>revert to camera2</p>
+                    <br>
+                    <button id="cameraToggle" type="button" class="buttonSmall">cameraToggle</button> 
+                    -->
+                </div>
+
+                <div id="faceDetected">
+                        <h3> Passive to Active Interactions</h3> 
+                        <!--
+                        <h4>Make a Musical   Selection</h4>
+                        <h4>click on menu to pick another</h4>
+                        -->
+                         <!--
+                        <button id="song01" type="button" class="btn btn-dark btn-lg btn-block"><h3 class="buttonMenu">Barry's idea</h3></button>
+                        <br>
+                        -->
+                        <!--
+                        <button id="song02" type="button" class="btn btn-dark btn-lg btn-block">Bach</button>
+                        <br>
+                        -->
+                    
+                    <h3><button id="song05" style="font-weight: bold" type="button" class="btn btn-dark btn-lg btn-block"> Amos Spirit</button></h3>
+                    
+                    <h3><button id="song03" style="font-weight: bold" type="button" class="btn btn-dark btn-lg btn-block"> Black Dog Jazz</button></h3>
+                        
+                    <h3><button id="song04" style="font-weight: bold" type="button" class="btn btn-dark btn-lg btn-block"> Two Hand Fire</button></h3>
+                        
+                    <h3><button id="song06" style="font-weight: bold" type="button" class="btn btn-dark btn-lg btn-block"> Marvin Grapevine</button></h3>
+                        <!--
+                    <h3><button id="song07" style="font-weight: bold" type="button" class="btn btn-dark btn-lg btn-block"> Fast Chapman</button></h3>
+                    -->
+                       
+                    <br>
+                   <!--
+                       <p style="text-align: center">Currently resolving some last minute bugs</p>
+                   -->
+                   <p style="text-align: center">For Optimum 3D Rendering Performance</p>
+                    <p style="text-align: center">Please refresh Chrome after each song</p>
+                     
+                    <!--
+                    <h4 class="buttonMenuH4">  <button target="_blank" onclick="location.href='https://www.youtube.com/watch?v=6hIre2kgH5c'"  id="demo" type="button" class="btn btn-dark btn-lg btn-block">Demonstation Video</button></h4>
+                    <h4 class="buttonMenuH4"><button  id="credits" type="button" class="btn btn-dark btn-lg btn-block">Credits</button></h4>
+                    -->
+                    <!--
+                    <h3>  <a  style="color:#00AEEF;" href=" ">Week 6 & 7 is here</a> and </h3> 
+                    -->
+                    <div style="text-align: center;">
+                    <h3> <a target="_blank" style="color:dimgrey" href="docs/outline.pdf"> Outline </a>  </h3> 
+                    <h3> <a target="_blank" style="color:dimgrey" href="docs/credits.pdf"> Credits </a>  </h3> 
+                </div>
+                    <br> 
+                    <!--
+                    <div>
+                        <h1 id="creditText" class= ""> Credits</h1>
+                        <br>
+ 
+                      
+                        
+                         
+                    </div>
+                    -->
+                        
+                </div>
+            </div> 
+        </div>
+        <!--
+    <div id='scene3dCanvas' class="black"></div> 
+    -->
+    <div id='scene1_3dCanvas'  > </div> 
+    <div id='scene3_3dCanvas'  >This is Scene 3</div> 
+
+    
+         
+   
+  </body> 
+<script>
+
+    var stateOfAR = {};
+    var rads = 57.296;
+   
+    //Scenes at Start up
+    var scene1Canvas = document.getElementById("scene1_3dCanvas");    //ToDo Rename these variables
+    var scene3Canvas = document.getElementById("scene3_3dCanvas");
+  
+    scene1Canvas.style.display = "block";
+    scene3Canvas.style.display = "none";
+
+    var x = document.getElementById("faceDetected");
+    x.style.display = "none";
+
+    var element = document.getElementById("jeeFaceFilterCanvas");
+    element.classList.add("flip");
+ 
+   
+    //Global Objects for Flags, Parameters and Mappings
+    console.log('--declareGlobalObjectsAndFiles');
+
+    //Keeps track of the Timers and Flags for each Stage 
+    //with methods for simple tasks
+    function clockAndFlagsForAStage(name)  { 
+        this.name = name,
+        this.initialTime = 0,
+        this.currentTime = 0,
+        this.pauseTime = 0,
+        this.delayAtEndSeconds = 0,
+     
+        this.initialTimeFlag = false,
+        this.playSongFlag = false,
+        this.pauseTimeFlag = false,
+        this.songIsOverFlag = false,     
+
+        this.initialTimeSeconds = 0,
+        this.currentTimeSeconds = 0,
+        this.endTimeSeconds = 0,        //ToDo - Useful as a Debug Timer asWell
+        this.initialTimeSecondsFlag = false,
+
+        this.delayAtEndSecondsFlag = false, 
+
+        this.notes01Flag = false,
+        this.notes01counter = 0, 
+        this.notes02Flag = false,
+        this.notes02counter = 0, 
+
+        this.bothFinished = function(){ 
+
+            if ((this.notes01Flag == true) && (this.notes02Flag == true)){
+                console.log(this.name + ' is ' + this.notes01Flag + ' ' + this.notes02Flag );
+                return true;
+            }else { 
+              //  console.log(this.notes01Flag + ' ' + this.notes02Flag );
+                return  false; 
+            } 
+        }
+        
+    }
+
+    var cAndFs1 = new clockAndFlagsForAStage("Stage1");
+    var cAndFs2 = new clockAndFlagsForAStage("Stage2");
+    var cAndFs3 = new clockAndFlagsForAStage("Stage3");
+
+
+    var clock = { 
+            seconds : 0, 
+            delayAtEndSeconds : 0,
+            
+            initialTimeStage1 : 0,    //Timers in milliseconds
+            currentTimeStage1 : 0,     //Timers for Note Sync
+            pauseTimeStage1 : 0,
+
+            initialTime : 0,    //Timers in milliseconds
+            currentTime : 0,     //Timers for Note Sync
+            pauseTime:0,
+            
+            initialTimeStage3 : 0,    //Timers in milliseconds
+            currentTimeStage3 : 0,
+            pauseTimeStage3 : 0, 
+
+            startAnimation : 2
+            //endAnimation :  460   //Used for Debug
+    } 
+     
+     //ToDo - Create an object for each Stage, with required Flags
+    var appFlags = {
+        faceDetectedFlag : false, 
+        //determineLengthOfLongestFlag : false,
+
+        initialTimeFlag : false,  
+        songIsOver: false, 
+        delayAtEndSecondsFlag: false, 
+        playSongStage1:false,       
+                                   
+        playSong : false,        
+        playSongStage3:false,
+
+        //ToDo - these Flags should be in an their own object
+        stage1_initialTimeFlag: false,
+        stage1_pauseTimeFlag: false,
+        stage1_playSong: false,
+        stage1_songIsOver: false,
+        stage1_delayAtEndSecondsFlag: false,
+
+        stage3_initialTimeFlag: false,
+        stage3_playSong: false,
+        stage3_songIsOver: false,
+        stage3_delayAtEndSecondsFlag: false,
+        stage3_pauseTimeFlag: false,
+
+        observerMode: false,
+        cameraToggleFlag : false,
+        animation3RunOnce : false
+    }
+
+    //ToDo - Create Prototype objects for each stage
+    var arraysFinished = {
+        notes01Flag: false,  
+        notes01counter : 0,
+        notes02Flag: false,
+        notes02counter : 0, 
+        bothFinished : function() { 
+            var returnFlag = false;
+            //massive that should be this
+            if ((arraysFinished.notes01Flag == true) 
+                && (
+                arraysFinished.notes02Flag == true)){
+                    returnFlag = true;
+                } 
+            else{
+                returnFlag = false
+                    }
+            return returnFlag;
+            },
+        reset : function () {
+            console.log('--reset arraysFinished');
+            this.notes01Flag = false; 
+            this.notes01counter =  0;
+            this.notes02Flag = false;
+            this.notes02counter = 0;
+        }
+    }
+    
+    var arraysFinishedStage1  = {
+        notes01Flag: false,  
+        notes01counter : 0,
+        notes02Flag: false,
+        notes02counter : 0, 
+        bothFinished : function() { 
+            var returnFlag = false; 
+            if ((arraysFinishedStage1.notes01Flag == true) 
+                && (
+                    arraysFinishedStage1.notes02Flag == true)){
+                    returnFlag = true;
+                } 
+            else{
+                returnFlag = false
+                    }
+            return returnFlag;
+            },
+        reset : function () {
+            console.log('--reset arraysFinishedStage1');
+            this.notes01Flag = false; 
+            this.notes01counter =  0;
+            this.notes02Flag = false;
+            this.notes02counter = 0;
+        }
+    }
+
+
+    var parameters = {
+        x1 : 50,
+        y1 : 50,
+        
+        y1Offset : 25,
+        camController_x : 0,
+        camController_y : 0,
+        camController_z : 0, 
+        cameraPositionZ : 250, 
+
+        lengthOfLongest : { length:0,           //ToDo - this should be a function of the Object
+                            notearray:0 }, 
+        placeInSong :0, 
+    }
+
+    let audio = {
+        channel_L_mp3 : new Tone.Player(),
+        channel_R_mp3 : new Tone.Player(),
+        channel_L_json : [],
+        channel_R_json : []
+    }
+
+    let z_forAudio = {
+        z_initialOffset : -1450,
+        timeNoteScaled :  350,
+        timebetweenNotes : 80,
+        inVerseSpeed : 5
+    }
+ 
+    var mappings = {
+        webCam2Scene3DCam_x : 90,
+        webCam2Scene3DCam_y : 90        
+    }
+    
+
+
+    //Load Audio Assts Assets
+    let barryL = new Tone.Player();
+    let barryR = new Tone.Player(); 
+    let ave_maria_2_short_L_mp3 = new Tone.Player();
+    let ave_maria_2_short_R_mp3 = new Tone.Player(); 
+    let ledZep_blackDog_90secs_L = new Tone.Player();
+    let ledZep_blackDog_90secs_R = new Tone.Player(); 
+    let hendrix_fire_75secs_L = new Tone.Player();
+    let hendrix_fire_75secs_R = new Tone.Player(); 
+    let amos_spirit_L = new Tone.Player();
+    let amos_spirit_R = new Tone.Player();  
+    let marvin_grapevine_L = new Tone.Player();     
+    let marvin_grapevine_R = new Tone.Player(); 
+    let chapman_fast_L = new Tone.Player();
+    let chapman_fast_R = new Tone.Player(); 
+    //Notes Values imported at start 
+
+    loadAudio(); 
+
+    var notes01 = []; 
+    var notes02 = []; 
+    
+    //Time Logic
+    setInterval(timer_1s, 1000);
+    setInterval(timer_10ms, 10); 
+    setInterval(timer_100ms, 100); 
+
+// Button Logic */
+/////////////////////////////////////////////////////////////////////
+//<button onclick="myFunction()">Click Me</button>
+    document.addEventListener('click', function (event) { 
+
+        if (event.target.id == "menu") { 
+            console.log('--menu');
+           // clearNotesAndAudioArrays();
+            var x = document.getElementById("userInterfaceChoice");
+            x.style.display = "block"; 
+
+            arraysFinishedStage1.stage1_playSong = false;
+            //appFlags.playSong = false;
+            cAndFs2.playSongFlag = false;
+            appFlags.playSongStage1 = false;
+            cAndFs3.playSongFlag = false;
+            cAndFs3.songIsOverFlag = false; 
+
+            audio.channel_L_mp3.stop();
+            audio.channel_R_mp3.stop();
+
+            //revert to Scene 1 if in Scene 3
+            if (scene1Canvas.style.display == "none") {
+                    console.log('--revert to Scene 1 if in Scene 3');
+                    scene1Canvas.style.display = "block";
+                    scene3Canvas.style.display = "none";
+                    clearScene3();
+                    
+            } 
+            clearScene();
+            walls();
+        }
+    
+
+        if (event.target.id == "cameraToggle") {  
+            hideMenu();
+            
+            console.log('appFlags.cameraToggle = ' + appFlags.cameraToggleFlag )
+            if (appFlags.cameraToggleFlag == false) {
+                appFlags.cameraToggleFlag = true;
+            }else {
+                appFlags.cameraToggleFlag = false;
+            } 
+        } 
+
+
+        if (event.target.id == "screenShot") {
+            /*
+            console.log('--screenShot');  
+            // open in new window like this 
+            var w = window.open('', '');
+            w.document.title = "Screenshot"; 
+            var img = new Image();
+            // Without 'preserveDrawingBuffer' set to true, we must render now
+            renderer.render(scene3, camera3);
+            img.src = renderer.domElement.toDataURL();
+            w.document.body.appendChild(img); 
+            */  
+            console.log(camera3.position);
+            console.log(camera3.position.x.toFixed(1) + ',' + camera3.position.y.toFixed(1) + ',' + camera3.position.z.toFixed(1));
+            camera3.position.set(300,300,-57);
+            console.log(camera3.position);
+        }
+
+
+        if (event.target.id == "scene3Show") {
+            console.log('--scene3Show');
+                
+            scene1Canvas.style.display = "none";
+            scene3Canvas.style.display = "block"; 
+            cAndFs3.playSongFlag = true;
+            camera3.position.set(300,300,-57);
+            hideMenu();
+            clearScene3();
+           // renderScene3();
+           // animate3();    
+             cAndFs3.playSongFlag = true; 
+             cAndFs2.delayAtEndSecondsFlag = false; 
+        }
+
+
+        if (event.target.id == "sceneToggle") {
+            console.log('--sceneToggle');
+            
+            if (scene1Canvas.style.display == "none") {
+                console.log('--sceneToggle-if_note');
+                scene1Canvas.style.display = "block";
+                scene3Canvas.style.display = "none";
+                cAndFs3.songIsOverFlag = false;    
+               
+            } else {
+                console.log('--sceneToggle-else');
+                scene1Canvas.style.display = "none";
+                scene3Canvas.style.display = "block";
+                cAndFs3.songIsOverFlag = true;
+                
+            }
+    }
+
+   ////////////////////////////////////////////////////
+    if (event.target.id == "song01") {
+        console.log('song01');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays();
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+
+        audio.channel_L_mp3 = barryL;
+        audio.channel_R_mp3 = barryR;
+        audio.channel_L_json = barrysIdea_01_L_guitar.notes
+        audio.channel_R_json = barrysIdea_01_R_bass.notes 
+
+        z_forAudio.z_initialOffset = -1450;
+        z_forAudio.timeNoteScaled = 100;
+        z_forAudio.timebetweenNotes = 175; 
+        z_forAudio.inVerseSpeed = 9; 
+ 
+        clearScene();
+        loadNotes(cAndFs2);
+        walls();
+    }
+
+
+    if (event.target.id == "song02") {
+        console.log('song02');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays(); 
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+       
+      // audio.channel_L_mp3 = ;
+       // audio.channel_R_mp3 = ;
+       // audio.channel_L_json = .notes
+       // audio.channel_R_json = .notes 
+
+        z_forAudio.z_initialOffset = -1450;
+        z_forAudio.timeNoteScaled = 100;
+        z_forAudio.timebetweenNotes = 175; 
+        z_forAudio.inVerseSpeed = 9; 
+ 
+        clearScene();
+        loadNotes(cAndFs2); 
+        cAndFs3.endTimeSeconds = 7100;
+    }
+
+
+    if (event.target.id == "song03") {
+        console.log('song03 - Black Dog');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays(); 
+        arraysFinished.reset();
+        arraysFinishedStage1.reset(); 
+      
+        audio.channel_L_mp3 = ledZep_blackDog_60secs_L;
+        audio.channel_R_mp3 = ledZep_blackDog_60secs_R; 
+        audio.channel_L_json = ledZep_blackDog_60secs_L_notes.notes
+        audio.channel_R_json = ledZep_blackDog_60secs_R_notes.notes  
+
+        z_forAudio.z_initialOffset = -750;
+        z_forAudio.timeNoteScaled = 90;
+        z_forAudio.timebetweenNotes = 125; 
+        z_forAudio.inVerseSpeed = 10; 
+
+       
+ 
+        clearScene();
+        loadNotes(cAndFs2); 
+        cAndFs3.endTimeSeconds = 66000;
+    }
+
+
+    if (event.target.id == "song04") {
+        console.log('song04 - Two Hand Fire');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays(); 
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+       
+      
+        audio.channel_L_mp3 = hendrix_fire_75secs_L;
+        audio.channel_R_mp3 = hendrix_fire_75secs_R;  
+        audio.channel_L_json = hendrix_fire_75secs_L_notes.notes;
+        audio.channel_R_json = hendrix_fire_75_R_notes.notes;
+
+        z_forAudio.z_initialOffset = -750;
+        z_forAudio.timeNoteScaled = 90;
+        z_forAudio.timebetweenNotes = 125; 
+        z_forAudio.inVerseSpeed = 11; 
+ 
+        clearScene();
+        loadNotes(cAndFs2); 
+        cAndFs3.endTimeSeconds = 84000;
+    }
+
+
+    if (event.target.id == "song05") {
+        console.log('song05 - Amost Spirit');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays(); 
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+       
+      
+        audio.channel_L_mp3 = amos_spirit_L;
+        audio.channel_R_mp3 = amos_spirit_R;  
+        audio.channel_L_json = amos_teen_L_notes.notes;
+        audio.channel_R_json = amos_teen_R_notes.notes;
+
+        z_forAudio.z_initialOffset = -750;
+        z_forAudio.timeNoteScaled = 90;
+        z_forAudio.timebetweenNotes = 125; 
+        z_forAudio.inVerseSpeed = 11; 
+ 
+        clearScene();
+        loadNotes(cAndFs2); 
+        cAndFs3.endTimeSeconds = 71000;
+    }
+
+
+    if (event.target.id == "song06") {
+        console.log('song06 - marving grapevine');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays(); 
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+       
+      
+        audio.channel_L_mp3 = marvin_grapevine_L;
+        audio.channel_R_mp3 = marvin_grapevine_R;  
+        audio.channel_L_json = marvin_grapevine_L_notes.notes;
+        audio.channel_R_json = marvin_grapevine_R_notes.notes;
+
+        z_forAudio.z_initialOffset = -750;
+        z_forAudio.timeNoteScaled = 90;
+        z_forAudio.timebetweenNotes = 125; 
+        z_forAudio.inVerseSpeed = 11; 
+ 
+        clearScene();
+        loadNotes(cAndFs2); 
+        cAndFs3.endTimeSeconds = 56000 ;
+    }
+
+
+    if (event.target.id == "song07") {
+        console.log('song07 - fast cars');
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays(); 
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+       
+      
+        audio.channel_L_mp3 = chapman_fast_L;
+        audio.channel_R_mp3 = chapman_fast_R;  
+        audio.channel_L_json = chapman_fast_L_notes.notes;
+        audio.channel_R_json = chapman_fast_R_notes.notes;
+
+        z_forAudio.z_initialOffset = -1050;
+        z_forAudio.timeNoteScaled = 90;
+        z_forAudio.timebetweenNotes = 125; 
+        z_forAudio.inVerseSpeed = 11; 
+ 
+        clearScene();
+        loadNotes(cAndFs2); 
+    }
+
+
+    if (event.target.id == "shortTest") {
+        console.log('shortTest - save_maria_2_short_L_mp3'); 
+        hideMenu();
+        clearFlagsTimersAndCounters();  
+        clearNotesAndAudioArrays();
+        arraysFinished.reset();
+        arraysFinishedStage1.reset();
+       
+        audio.channel_L_mp3 = ave_maria_2_short_L_mp3;
+        audio.channel_R_mp3 = ave_maria_2_short_R_mp3;        
+        audio.channel_L_json = ave_maria_2_short_L_notes.notes;
+        audio.channel_R_json = ave_maria_2_short_R_notes.notes;
+        
+        z_forAudio.z_initialOffset = -1450;
+        z_forAudio.timeNoteScaled = 350;
+        z_forAudio.timebetweenNotes = 150;
+        z_forAudio.inVerseSpeed = 3; 
+
+       // determineLengthOfLongest();
+        loadNotes(cAndFs2); 
+        clearScene(); 
+        walls(); 
+    }
+     
+
+   
+    
+}, false);
+ 
+    function timer_1s() { 
+        ////////////////////////////////Stage 2
+        if (appFlags.faceDetectedFlag == true) { 
+                clock.seconds++; 
+
+                if (cAndFs2.delayAtEndSecondsFlag== true ){ 
+                    cAndFs2.delayAtEndSeconds++;  
+                    var firstDelay = 2;
+                    var secondDelay = 4;
+                    var thirdDelay = 6;
+                    
+                    if (cAndFs2.delayAtEndSeconds == firstDelay){
+                        console.log('--' + cAndFs2.name + 'delayAtEndSeconds = ' + firstDelay);  
+                       // walls();
+                        console.log('L = ' +  audio.channel_L_mp3.state + ' R = ' + audio.channel_R_mp3.state);   
+                    }  
+
+                    if (cAndFs2.delayAtEndSeconds == secondDelay){   
+                        console.log('--' + cAndFs2.name + 'delayAtEndSeconds = ' + secondDelay);  
+                        //appFlags.playSong = false;  
+                        cAndFs2.playSongFlag = false;
+                        audio.channel_L_mp3.stop();
+                        audio.channel_R_mp3.stop(); 
+                        console.log('L = ' +  audio.channel_L_mp3.state + ' R = ' + audio.channel_R_mp3.state);                      
+                        //console.log(camera3.position);
+                        //camera3.position.set(300,300,-57);
+                       // console.log(camera3.position);
+                    }
+    
+                    if (cAndFs2.delayAtEndSeconds == thirdDelay){
+                        console.log('--' + cAndFs2.name + 'delayAtEndSeconds = ' + thirdDelay);  
+                        scene1Canvas.style.display = "none";
+                        scene3Canvas.style.display = "block";
+                        console.log(camera3.position);
+                        camera3.position.set(300,300,-57);
+                        console.log(camera3.position);
+                        cAndFs3.playSongFlag = true; 
+                        //clearNotesAndAudioArrays();
+                        loadNotes(cAndFs3);
+                        console.log('--camera3 position set here');
+                       // renderScene3(); //  ToDo - This was causing the initial state of Stage3
+                    //    animate3();    
+                       
+                    
+                       
+                        appFlags.observerMode = true;
+                        cAndFs2.delayAtEndSecondsFlag = false; 
+                    
+                        console.log('L = ' +  audio.channel_L_mp3.state + ' R = ' + audio.channel_R_mp3.state);                      
+                    
+                    } 
+                }
+
+
+               
+
+                ////////////////////////Stage 3 Ending
+                if (cAndFs3.delayAtEndSecondsFlag == true ){ 
+                    console.log('--delayAtEndSeconds' );
+                    cAndFs3.delayAtEndSeconds++;
+                    var firstDelay = 2; 
+                    var secondDelay = 5; 
+
+                    if (cAndFs3.delayAtEndSeconds == firstDelay){   
+                        console.log('--' + cAndFs3.name + 'delayAtEndSeconds = ' + firstDelay);
+                        //appFlags.playSong = false;   
+                        console.log('L = ' +  audio.channel_L_mp3.state + ' R = ' + audio.channel_R_mp3.state); 
+                        scene1Canvas.style.display = "none";
+                        scene3Canvas.style.display = "block";    
+                        cAndFs3.playSong = false   ;               
+                    }
+
+                    if (cAndFs3.delayAtEndSeconds == secondDelay){   
+                        console.log('--' + cAndFs3.name + 'delayAtEndSeconds = ' + secondDelay);
+                        console.log('--cAndFs3.delayAtEndSecondsFlag = false');
+                        cAndFs3.delayAtEndSecondsFlag = false;          
+                        audio.channel_L_mp3.stop();
+                        audio.channel_R_mp3.stop(); 
+                        console.log('L = ' +  audio.channel_L_mp3.state + ' R = ' + audio.channel_R_mp3.state); 
+                      
+                    }
+                }
+                
+
+
+        }
+    }
+        
+
+    
+
+    function timer_10ms() { 
+        var d = new Date();   var n = d.getTime();   
+        ///////////////////////////Stage1
+        if (appFlags.faceDetectedFlag == true) {  
+           
+            if (appFlags.playSongStage1 == true) { 
+               
+                    //Get the initalTime .... and then count from there
+                    if (appFlags.stage1_initialTimeFlag == false) { 
+                        //clock.initialTimeStage1 = nStage1; 
+                        clock.initialTimeStage1 = n; 
+                        appFlags.stage1_initialTimeFlag = true;  
+                    }  
+                  
+                    clock.currentTimeStage1 = n - clock.initialTimeStage1; 
+ 
+                    for ( var p=0 ; p < notes01.length ; p++ ){   
+                        placeNotesInArrayInSceneStage1(notes01[p],1); 
+                    }
+                    for ( var q=0 ; q < notes02.length ; q++ ){   
+                        placeNotesInArrayInSceneStage1(notes02[q],2);   
+                    } 
+                     if (clock.currentTimeStage1 > 3000) {
+                        console.log('--clock.currentTimeStage 1 stopped');
+                        appFlags.playSongStage1  = false;  
+                        cAndFs2.playSongFlag = true;
+                     } 
+
+            }else{
+                appFlags.stage1_initialTimeFlag = false;
+            }
+            //////////////Stage 2  
+            if (cAndFs2.playSongFlag == true) { 
+
+                scene1Canvas.style.display = "block";
+                scene3Canvas.style.display = "none";
+
+                if (cAndFs2.initialTimeFlag == false) {                        
+                    cAndFs2.initialTime = n; 
+                    cAndFs2.initialTimeFlag  = true;  
+                }  
+                cAndFs2.currentTime = n - cAndFs2.initialTime;
+                    
+                for ( var p=0 ; p < notes01.length ; p++ ){   
+                    placeNotesInArrayInScene(notes01[p],0,cAndFs2.currentTime,cAndFs2); 
+                } 
+                for ( var q=0 ; q < notes02.length ; q++ ){   
+                    placeNotesInArrayInScene(notes02[q],1,cAndFs2.currentTime,cAndFs2);  
+                }  
+                    
+                if (cAndFs2.songIsOverFlag == true) { 
+                    if (cAndFs2.delayAtEndSecondsFlag == false ){   
+                        cAndFs2.delayAtEndSecondsFlag = true;
+                    }
+                    clock.seconds = 0;  
+                } 
+            }
+            else { 
+                cAndFs2.initialTimeFlag = false; 
+                cAndFs2.playSongFlag = false;
+            } 
+
+        } //Face Detect
+     
+    }//Timer10ms Ends
+
+    function timer_100ms() { 
+        var d = new Date();
+        var n = d.getTime(); 
+
+        if (cAndFs3.playSongFlag == true) {
+               // console.log(cAndFs3);
+                scene1Canvas.style.display = "none";
+                scene3Canvas.style.display = "block";
+
+                if (audio.channel_L_mp3.state == "stopped")   { audio.channel_L_mp3.start();  } 
+                if (audio.channel_R_mp3.state == "stopped")   { audio.channel_R_mp3.start();  }   
+
+                if (appFlags.stage3_initialTimeFlag == false) { //InitalTimer
+                        clock.initialTimeStage3 = n; 
+                        appFlags.stage3_initialTimeFlag = true;  } 
+                clock.currentTimeStage3 = n - clock.initialTimeStage3;  
+
+                for ( var qq=0 ; qq < notes01.length ; qq++ ){     
+                    renderNoteSphereinScene3andaThird (notes01[qq],0, qq,cAndFs3);
+                }  
+                for ( var ff=0 ; ff < notes02.length ; ff++ ){     
+                    renderNoteSphereinScene3andaThird (notes02[ff],1, ff,cAndFs3);;
+                }
+                //ToDo This shouldn't be here
+                if (cAndFs2.songIsOverFlag == true) { 
+                    if (cAndFs2.delayAtEndSecondsFlag == false ){   
+                        cAndFs2.delayAtEndSecondsFlag = true;
+                    }  
+                } 
+                //Hail Mary Timer
+                if (cAndFs3.initialTimeSecondsFlag == false) { //InitalTimer
+                    cAndFs3.initialTimeSeconds = n; 
+                    cAndFs3.initialTimeSecondsFlag = true;  } 
+                cAndFs3.currentTimeSeconds = n - cAndFs3.initialTimeSeconds;
+                //console.log(cAndFs3.currentTimeSeconds + ',' + cAndFs3.endTimeSeconds)  
+                if (cAndFs3.currentTimeSeconds >= cAndFs3.endTimeSeconds){
+                    console.log(cAndFs3.name + ' is Done! ' + cAndFs3.currentTimeSeconds + ',' + cAndFs3.endTimeSeconds)  
+                    cAndFs3.playSongFlag = false;
+                    cAndFs3.delayAtEndSecondsFlag=true;
+                }
+               
+
+
+
+                if (cAndFs3.songIsOverFlag == true) { 
+                    console.log('---Stage3 Over '); 
+                    cAndFs3.delayAtEndSecondsFlag=true;
+                    clock.seconds = 0;
+                   // scene1Canvas.style.display = "block";
+                   // scene3Canvas.style.display = "none";
+                   // showMenu();
+                }
+                   
+             
+
+            }
+            else { 
+
+                appFlags.stage3_initialTimeFlag = false;
+                //appFlags.playSongStage3 = false;  
+                cAndFs3.playSongFlag = false;
+              
+            }
+
+    }
+
+    function updateTable () {  
+        if (appFlags.faceDetectedFlag == true) {
+            //Position of Head Relative to Center of Webcam
+          //  document.getElementById('camController_x').innerHTML = parameters.camController_x + "(x)"; 
+          //  document.getElementById('camController_y').innerHTML = parameters.camController_y + "(y)"; 
+
+        //Orientation of Head
+        
+           // document.getElementById('camController_x').innerHTML = (stateOfAR.rx * rads).toFixed(2) + "(x)"; 
+           // document.getElementById('camController_y').innerHTML = (stateOfAR.ry * rads).toFixed(2)  + "(y)"; 
+            
+         //console.log((stateOfAR.rx * rads).toFixed(4)+ ',' + (stateOfAR.ry * rads).toFixed(4));
+        //    / console.log(parameters.camController_x);
+            var x_posasdf = parseFloat(parameters.camController_x);
+            var y_posasdf = parseFloat(parameters.camController_y);
+        //Orientation and Position
+        /*
+        document.getElementById('camController_x').innerHTML = x_posasdf.toFixed(1) + " (x) " + (stateOfAR.rx * rads).toFixed(0) + '°';
+        document.getElementById('camController_y').innerHTML = y_posasdf.toFixed(1)+ " (y) " + (stateOfAR.ry * rads).toFixed(0)+ '°';
+        */
+
+             /*
+         var x = (stateOfAR.rx * rads).toFixed(2);
+         var y = (stateOfAR.ry * rads).toFixed(2);
+
+                
+                if ((x < -16) && (y > 16)){
+                        console.log('zone1');
+                }
+                else if ((x < -18) && (y < -16)){
+                        console.log('zone2');
+                }
+                else if ((x > 7) && (y > 16)){
+                        console.log('zone3');
+                }
+                else if ((x > 7) && (y < -16)){
+                        console.log('zone4');
+                }
+                else{
+                    console.log('zone0');
+                }
+              */
+
+
+        }
+    }
+    updateTable();
+
+</script>
+<script src="js/stageTwo.js"></script>
+
+<script src="js/demo_cube.js"></script>
+
+</html>
+ 
+  
