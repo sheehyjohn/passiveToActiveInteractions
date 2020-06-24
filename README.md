@@ -3,9 +3,10 @@ potential ISSTA - Submission 2020
 
 **[Live Demo](https://passivetoactiveinteractions.netlify.app/)**
 
+There are occasional synch issues with the online version and if this occurs, it is recommeneded to run a version locally.
 
-Start the project by Download the Repository.
-Node/NPM needs to be installed
+Start the project by downloading/forkting this repository.
+Node/NPM need to be installed
 Open downloaded directory in terminal
 
 ```
