@@ -1,7 +1,7 @@
 # passiveToActiveInteractions
 potential ISSTA - Submission 2020
 
-[https://passivetoactiveinteractions02.netlify.app/] (https://passivetoactiveinteractions02.netlify.app/)
+[https://passivetoactiveinteractions02.netlify.app/](https://passivetoactiveinteractions02.netlify.app/)
 
 There are occasional sync issues with the online version and if this occurs, it is recommeneded to run a version locally.
 
